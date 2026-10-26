@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<widget xmlns="http://www.w3.org/ns/widgets" xmlns:tizen="http://tizen.org/ns/widgets" id="https://tizgb.local/launcher" version="1.0.0" viewmodes="fullscreen">
+    <tizen:application id="GBLAUNCH01.Launcher" package="GBLAUNCH01" required_version="6.0"/>
+    <content src="index.html"/>
+    <icon src="icon.png"/>
+    <name>TizGB</name>
+    <feature name="http://tizen.org/feature/screen.size.all"/>
+    <tizen:privilege name="http://tizen.org/privilege/application.launch"/>
+    <tizen:profile name="tv"/>
+    <tizen:setting screen-orientation="landscape" context-menu="disable" background-support="disable" encryption="disable" install-location="auto" hwkey-event="enable"/>
+</widget>

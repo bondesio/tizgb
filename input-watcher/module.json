@@ -1,0 +1,9 @@
+{
+  "id": "tizgb-input",
+  "name": "TizGB selected gamepad capture",
+  "version": "1.0.0",
+  "description": "Grant the TizGB owner access only to the selected physical USB gamepad event node for exclusive capture, and restore it when disabled. Independent of tiznes-input.",
+  "author": "Pablo",
+  "scripts": { "boot": "boot.sh" },
+  "minAgent": "4"
+}

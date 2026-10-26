@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TizGB</title>
+  <style>
+    html,body{margin:0;width:100%;height:100%;background:#001d49;color:#fff;font-family:sans-serif}
+    main{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center}
+    h1{margin:0 0 24px;font-size:84px;font-weight:400}
+    p{margin:0;font-size:34px;color:#fccc67}
+  </style>
+</head>
+<body>
+  <main><h1>TizGB</h1><p id="status">Opening…</p></main>
+  <script>
+    (function () {
+      var APP = 'org.pablo.tizgb';
+      var status = document.getElementById('status') || document.querySelector('main');
+      var launched = false, wasHidden = false, hintTimer = null;
+      function leave() {
+        try { tizen.application.getCurrentApplication().exit(); } catch (e) {}
+      }
+      function fail(e) {
+        launched = false;
+        status.textContent = 'Could not launch: ' + e.message + ' — press Enter to retry';
+      }
+      function launch() {
+        status.textContent = 'Opening…';
+        window.clearTimeout(hintTimer);
+        try {
+          tizen.application.launch(APP, function () {
+            launched = true;
+            // Never exit on a timer: a cold native start can outlast it and
+            // leave nothing in the foreground, which drops the TV to Home
+            // (the project-wide launcher bug fixed in NESLAUNCH1 1.0.6).
+            hintTimer = window.setTimeout(function () {
+              if (!document.hidden) status.textContent = 'Still starting… press Enter to retry, Back to exit';
+            }, 20000);
+          }, fail);
+        } catch (e) { fail(e); }
+      }
+      // Leave only once the native window has taken the screen (page hidden),
+      // and again if the user backs out of it into this launcher.
+      document.addEventListener('visibilitychange', function () {
+        if (!launched) return;
+        if (document.hidden) { wasHidden = true; leave(); }
+        else if (wasHidden) leave();
+      });
+      document.addEventListener('keydown', function (ev) {
+        if (ev.keyCode === 13) launch();
+        else if (ev.keyCode === 10009) leave();
+      });
+      launch();
+    }());
+  </script>
+</body>
+</html>
